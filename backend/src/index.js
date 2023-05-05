@@ -37,6 +37,8 @@ app.use((error, req, res, next) => {
   res.send(error.message || '서버 에러');
 });
 
+app.use('/users', require('./routes/users'));
+
 app.listen(4000, () => {
   console.log(`${port}번에서 실행이 되었습니다`);
 });
