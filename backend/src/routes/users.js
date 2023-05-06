@@ -4,20 +4,6 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const auth = require('../middleware/auth');
 
-router.get('/auth', auth, async (req, res, next) => {
-  try {
-    return res.json({
-      id: req.user._id,
-      email: req.user.email,
-      name: req.user.name,
-      role: req.user.role,
-      image: req.user.image,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.post('/register', async (req, res, next) => {
   try {
     const user = new User(req.body);
@@ -53,6 +39,28 @@ router.post('/login', async (req, res, next) => {
     });
 
     return res.json({ user, accessToken }); // >> userSlice > loginUser.fulfilled
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/auth', auth, async (req, res, next) => {
+  try {
+    return res.json({
+      id: req.user._id,
+      email: req.user.email,
+      name: req.user.name,
+      role: req.user.role,
+      image: req.user.image,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/logout', auth, async (req, res, next) => {
+  try {
+    return res.sendStatus(200);
   } catch (error) {
     next(error);
   }
