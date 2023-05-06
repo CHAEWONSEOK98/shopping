@@ -14,3 +14,32 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
+
+export const loginUser = createAsyncThunk(
+  'user/loginUser',
+  async (body, thunkAPI) => {
+    // payload creator
+    try {
+      const response = await axiosInstance.post(`/users/login`, body);
+
+      return response.data; // action payload
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.reponse.data || error.message);
+    }
+  }
+);
+
+export const authUser = createAsyncThunk(
+  'user/authUser',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(`/users/auth`);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.reponse.data || error.message);
+    }
+  }
+);
