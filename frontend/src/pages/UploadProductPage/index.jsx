@@ -40,7 +40,7 @@ const UploadProductPage = () => {
 
     const body = {
       // writer: userData.user._id,
-      writer: userData.user._id,
+      writer: userData.id,
       ...product,
     };
 

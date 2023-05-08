@@ -8,7 +8,7 @@ import {
 import { toast } from 'react-toastify';
 
 const initialState = {
-  userDate: {
+  userData: {
     id: '',
     email: '',
     name: '',
@@ -44,7 +44,7 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.userDate = action.payload;
+        state.userData = action.payload;
         state.isAuth = true;
         localStorage.setItem('accessToken', action.payload.accessToken);
       })
@@ -59,12 +59,13 @@ const userSlice = createSlice({
       })
       .addCase(authUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.userDate = action.payload;
+        state.userData = action.payload;
         state.isAuth = true;
       })
       .addCase(authUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        // state.userData = initialState.userData;
         state.isAuth = false;
         localStorage.removeItem('accessToken');
       })
@@ -74,7 +75,7 @@ const userSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.userDate = initialState.userDate;
+        state.userData = initialState.userDate;
         state.isAuth = false;
         localStorage.removeItem('accessToken');
       })
