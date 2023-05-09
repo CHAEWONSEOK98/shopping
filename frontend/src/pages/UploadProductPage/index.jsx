@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../utils/axios';
 import { useNavigate } from 'react-router-dom';
+import FileUpload from '../../components/FileUpload';
 
 const continents = [
   { key: 1, value: 'Africa' },
@@ -25,13 +26,19 @@ const UploadProductPage = () => {
   // ?????????? const userData = useSelector(state => state.user?.userData);
   const userData = useSelector((state) => state.user?.userData);
   const navigate = useNavigate();
-  console.log(userData);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProduct((prevState) => ({
       ...prevState,
       [name]: value,
+    }));
+  };
+
+  const handleImages = (newImages) => {
+    setProduct((prevState) => ({
+      ...prevState,
+      images: newImages,
     }));
   };
 
@@ -58,6 +65,8 @@ const UploadProductPage = () => {
       </div>
 
       <form className="mt-6" onSubmit={handleSubmit}>
+        <FileUpload images={product.images} onImageChange={handleImages} />
+
         <div className="mt-4">
           <label htmlFor="title">이름</label>
           <input
