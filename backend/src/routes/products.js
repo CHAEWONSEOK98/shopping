@@ -30,14 +30,24 @@ router.get('/', async (req, res, next) => {
   const sortBy = req.query.sortBy ? req.query.sortBy : '_id';
   const limit = req.query.limit ? Number(req.query.limit) : 20;
   const skip = req.query.skip ? Number(req.query.skip) : 0;
+
+  let findArgs = {};
+  for (let key in req.query.filters) {
+    if (req.query.filters[key].length > 0) {
+      findArgs[key] = req.query.filters[key];
+    }
+  }
+
+  console.log(req.query.filters);
+
   try {
-    const products = await Product.find()
+    const products = await Product.find(findArgs)
       .populate('writer')
       .sort([[sortBy, order]])
       .skip(skip)
       .limit(limit);
 
-    const productsTotal = await Product.countDocuments();
+    const productsTotal = await Product.countDocuments(findArgs);
     const hasMore = skip + limit < productsTotal ? true : false;
 
     return res.status(200).json({
