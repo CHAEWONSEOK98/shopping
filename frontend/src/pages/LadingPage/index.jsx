@@ -4,7 +4,7 @@ import CheckBox from './Sections/CheckBox';
 import RadioBox from './Sections/RadioBox';
 import SearchInput from './Sections/SearchInput';
 import axiosInstance from '../../utils/axios';
-import { continents } from '../../utils/filterData';
+import { continents, prices } from '../../utils/filterData';
 
 const LandingPage = () => {
   const limit = 4;
@@ -62,8 +62,25 @@ const LandingPage = () => {
     const newFilters = { ...filters };
     newFilters[category] = newFilteredData;
 
+    if (category === 'price') {
+      const priceValues = handlePrice(newFilteredData);
+      newFilters[category] = priceValues;
+    }
+
     showFilteredResults(newFilters);
     setFilters(newFilters);
+  };
+
+  const handlePrice = (value) => {
+    let array = [];
+
+    for (let key in prices) {
+      if (prices[key]._id === parseInt(value, 10)) {
+        array = prices[key].array;
+      }
+    }
+
+    return array;
   };
 
   const showFilteredResults = (filters) => {
@@ -93,7 +110,11 @@ const LandingPage = () => {
           />
         </div>
         <div className="w-1/2">
-          <RadioBox />
+          <RadioBox
+            prices={prices}
+            checkedPrice={filters.price}
+            onFilters={(filters) => handleFilters(filters, 'price')}
+          />
         </div>
       </div>
 
