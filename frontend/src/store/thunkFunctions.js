@@ -57,3 +57,17 @@ export const logoutUser = createAsyncThunk(
     }
   }
 );
+
+export const addToCart = createAsyncThunk(
+  'user/addToCart',
+  async (body, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(`/users/cart`, body);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.reponse.data || error.message);
+    }
+  }
+);
