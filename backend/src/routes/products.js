@@ -24,22 +24,6 @@ router.post('/image', auth, async (req, res, next) => {
   });
 });
 
-router.get('/:id', async (req, res, next) => {
-  const type = req.query.type;
-  let productIds = req.params.id;
-
-  // productId를 이용해서 DB에서 productId와 같은 상품의 정보를 가져옵니다.
-  try {
-    const product = await Product.find({ _id: { $in: productIds } }).populate(
-      'writer'
-    );
-
-    return res.status(200).send(product);
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.get('/', async (req, res, next) => {
   // asc 오름차순, desc 내림차순
   const order = req.query.order ? req.query.order : 'desc';
@@ -92,6 +76,30 @@ router.post('/', auth, async (req, res, next) => {
     const product = new Product(req.body);
     product.save();
     return res.sendStatus(201);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/:id', async (req, res, next) => {
+  const type = req.query.type;
+  let productIds = req.params.id;
+
+  // id=12312414, 12412314, 1231561
+  // productIds = ['12312414', '12412314', '1231561']
+
+  let ids = productIds.split(',');
+  productIds = ids.map((item) => {
+    return item;
+  });
+
+  // productId를 이용해서 DB에서 productId와 같은 상품의 정보를 가져옵니다.
+  try {
+    const product = await Product.find({ _id: { $in: productIds } }).populate(
+      'writer'
+    );
+
+    return res.status(200).send(product);
   } catch (error) {
     next(error);
   }
