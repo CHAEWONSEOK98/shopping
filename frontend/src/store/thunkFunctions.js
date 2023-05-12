@@ -82,8 +82,7 @@ export const getCartItems = createAsyncThunk(
 
       userCart.forEach((cardItem) => {
         response.data.forEach((productDetail, index) => {
-          console.log(productDetail);
-          if (cartItemIds.id === productDetail._id) {
+          if (cardItem.id === productDetail._id) {
             response.data[index].quantity = cardItem.quantity;
           }
         });

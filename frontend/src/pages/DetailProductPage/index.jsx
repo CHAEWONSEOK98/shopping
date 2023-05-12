@@ -14,7 +14,7 @@ const DetailProductPage = () => {
         const response = await axiosInstance.get(
           `/products/${productId}?type=single`
         );
-        console.log(response);
+
         setProduct(response.data[0]);
       } catch (error) {
         console.error(error);
