@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCartItems } from '../../store/thunkFunctions';
+import { getCartItems, removeCartItem } from '../../store/thunkFunctions';
 import CartTable from './Section/CartTable';
 
 const CartPage = () => {
@@ -28,7 +28,12 @@ const CartPage = () => {
   }, [dispatch, userData]);
 
   useEffect(() => {
-    calculateTotal(cartDetail);
+    // if 조건문을 안 걸어주면 type error 생김.
+    // cartDetail의 길이가 0일 때 calculateTotal 함수를 실행시켰을 때 에러
+
+    if (cartDetail.length > 0) {
+      calculateTotal(cartDetail);
+    }
   }, [cartDetail]);
 
   const calculateTotal = (cartItems) => {
@@ -38,16 +43,21 @@ const CartPage = () => {
     setTotal(total);
   };
 
-  const handleRemoveCartItem = () => {};
+  const handleRemoveCartItem = (productId) => {
+    dispatch(removeCartItem(productId));
+  };
   return (
     <section>
       <div className="text-center m-7">
         <h2 className="text-2xl">나의 장바구니</h2>
       </div>
 
-      <CartTable products={cartDetail} onRemoveItem={handleRemoveCartItem} />
       {cartDetail?.length > 0 ? (
         <>
+          <CartTable
+            products={cartDetail}
+            onRemoveItem={handleRemoveCartItem}
+          />
           <div className="mt-10">
             <p>
               <span className="font-bold">합계:</span>

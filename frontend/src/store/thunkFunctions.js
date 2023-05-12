@@ -95,3 +95,30 @@ export const getCartItems = createAsyncThunk(
     }
   }
 );
+
+export const removeCartItem = createAsyncThunk(
+  'user/removeCartItem',
+  async (productId, thunkAPI) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/users/cart?productId=${productId}`
+      );
+
+      // response.data.cart = userCart
+      // response.data.productInfo = response.data
+
+      response.data.cart.forEach((cardItem) => {
+        response.data.productInfo.forEach((productDetail, index) => {
+          if (cardItem.id === productDetail._id) {
+            response.data.productInfo[index].quantity = cardItem.quantity;
+          }
+        });
+      });
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.reponse.data || error.message);
+    }
+  }
+);
