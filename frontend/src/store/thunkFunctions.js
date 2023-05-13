@@ -122,3 +122,17 @@ export const removeCartItem = createAsyncThunk(
     }
   }
 );
+
+export const payProducts = createAsyncThunk(
+  'user/payProducts',
+  async (body, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(`/users/payment`, body);
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.reponse.data || error.message);
+    }
+  }
+);

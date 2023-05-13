@@ -5,6 +5,7 @@ import {
   getCartItems,
   loginUser,
   logoutUser,
+  payProducts,
   registerUser,
   removeCartItem,
 } from './thunkFunctions';
@@ -125,6 +126,21 @@ const userSlice = createSlice({
         toast.info('상품이 장바구니에서 제거되었습니다');
       })
       .addCase(removeCartItem.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        toast.error(action.payload);
+      })
+
+      .addCase(payProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(payProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.cartDetail = [];
+        state.userData.cart = [];
+        toast.info('성공적으로 상품을 구매했습니다.');
+      })
+      .addCase(payProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
         toast.error(action.payload);
